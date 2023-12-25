@@ -1,0 +1,112 @@
+[
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 1,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix",
+            "rating": 5,
+            "release_date": "1999-03-31",
+            "review": "This is a review of the movie The Matrix."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 2,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix Reloaded",
+            "rating": 4,
+            "release_date": "2003-05-07",
+            "review": "This is a review of the movie The Matrix Reloaded."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 3,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix Revolutions",
+            "rating": 3,
+            "release_date": "2003-10-27",
+            "review": "This is a review of the movie The Matrix Revolutions."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 4,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 4",
+            "rating": 3,
+            "release_date": "2021-12-22",
+            "review": "This is a review of the movie The Matrix 4."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 5,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 5",
+            "rating": 3,
+            "release_date": "2022-12-22",
+            "review": "This is a review of the movie The Matrix 5."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 6,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 6",
+            "rating": 3,
+            "release_date": "2023-12-22",
+            "review": "This is a review of the movie The Matrix 6."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 7,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 7",
+            "rating": 3,
+            "release_date": "2024-12-22",
+            "review": "This is a review of the movie The Matrix 7"
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 8,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 8",
+            "rating": 3,
+            "release_date": "2025-12-22",
+            "review": "This is a review of the movie The Matrix 8."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 9,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 9",
+            "rating": 3,
+            "release_date": "2026-12-22",
+            "review": "This is a review of the movie The Matrix 9."
+        }
+    },
+    {
+        "model": "mywatchlist.mywatchlist",
+        "pk": 10,
+        "fields": {
+            "watched": false,
+            "title": "The Matrix 10",
+            "rating": 3,
+            "release_date": "2027-12-22",
+            "review": "This is a review of the movie The Matrix 10."
+        }
+    }
+]

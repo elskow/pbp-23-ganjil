@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block content %}
+<h1>
+  Navigate to the following links to get the result in the desired format.
+</h1>
+<p>
+  <b>NOTE:</b> The default format is HTML. If you don't specify the format in
+  the URL, you will get the result in HTML format.
+</p>
+</br>
+<ul>
+  <li>Get HTML result.</li>
+  <a href="html">
+    <img
+      src="https://img.icons8.com/ios-filled/50/000000/html-5.png"
+      alt="HTML"
+      width="50"
+      height="50"
+    />
+  </a>
+  <li>Get JSON result.</li>
+  <a href="json">
+    <img
+      src="https://img.icons8.com/ios-filled/50/000000/json.png"
+      alt="JSON"
+      width="50"
+      height="50"
+    />
+  </a>
+  <li>Get XML result.</li>
+  <a href="xml">
+    <img
+      src="https://img.icons8.com/ios-filled/50/000000/xml.png"
+      alt="XML"
+      width="50"
+      height="50"
+    />
+  </a>
+</ul>
+{% endblock %}

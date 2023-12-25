@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block content %}
+<h1>This is your watchlist</h1>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Release Date</th>
+    <th>Rating</th>
+    <th>Review</th>
+    <th>Watched</th>
+  </tr>
+  {% for movie in watchlist_data %}
+  <tr>
+    <td>{{ movie.title }}</td>
+    <td>{{ movie.release_date }}</td>
+    <td>{{ movie.rating }}</td>
+    <td>{{ movie.review }}</td>
+    <td>{{ movie.watched }}</td>
+  </tr>
+  {% endfor %}
+</table>
+</br>
+<a href="{% url 'mywatchlist:index' %}">Back</a>
+{% endblock %}
