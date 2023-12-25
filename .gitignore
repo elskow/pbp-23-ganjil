@@ -33,7 +33,7 @@ pip-selfcheck.json
 .idea/**/gradle.xml
 .idea/**/libraries
 cmake-build-*/
-.idea/**/mongoSettings.xml
+.idea
 *.iws
 out/
 .idea_modules/
