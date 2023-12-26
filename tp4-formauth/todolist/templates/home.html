@@ -1,0 +1,129 @@
+{% extends "base.html" %} {%block meta%}
+<title>Home</title>
+{%endblock%} {%block content%}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="text-center">Home</h1>
+      <p class="lead text-center">Hello {{user.username}} !</p>
+      <p class="lead text-center">It's <span id="time"></span>.</p>
+
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Finished</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in tasks %}
+          <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.date }}</td>
+            <td>
+              {% if task.is_finished %}
+              <form
+                action="{% url 'todolist:toggle_finished' task.id %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <input
+                  type="checkbox"
+                  name="is_finished"
+                  checked
+                  onchange="this.form.submit()"
+                />
+              </form>
+              {% else %}
+              <form
+                action="{% url 'todolist:toggle_finished' task.id %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <input
+                  type="checkbox"
+                  name="is_finished"
+                  onchange="this.form.submit()"
+                />
+              </form>
+              {% endif %}
+            </td>
+            <td>
+              <form
+                action="{% url 'todolist:delete_task' task.id %}"
+                method="post"
+              >
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Delete" />
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-center">
+        <button id="toggleFormButton" class="btn btn-primary mb-3">
+          Add Task
+        </button>
+      </div>
+      <form id="addTaskForm" action="" method="post" style="display: none">
+        {% csrf_token %}
+        <div class="mb-3">
+          <input
+            type="text"
+            name="title"
+            placeholder="Task title"
+            class="form-control"
+          />
+        </div>
+        <div class="mb-3">
+          <textarea
+            name="description"
+            placeholder="Task description"
+            class="form-control"
+          ></textarea>
+        </div>
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %} {% endif %}
+        <div class="mb-3">
+          <input type="submit" value="Submit" class="btn btn-success" />
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <a href="{% url 'todolist:logout' %}" class="btn btn-primary">Logout</a>
+    </div>
+  </div>
+</div>
+<script>
+  function updateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    document.getElementById("time").textContent = `${hours}:${minutes}`;
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+  document
+    .getElementById("toggleFormButton")
+    .addEventListener("click", function () {
+      var form = document.getElementById("addTaskForm");
+      var button = document.getElementById("toggleFormButton");
+      if (form.style.display === "none") {
+        form.style.display = "block";
+        button.textContent = "Hide";
+      } else {
+        form.style.display = "none";
+        button.textContent = "Add Task";
+      }
+    });
+</script>
+{%endblock%}
