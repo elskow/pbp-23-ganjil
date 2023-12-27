@@ -1,0 +1,174 @@
+{% extends "base.html" %} {% block meta %}
+<title>Home</title>
+{% endblock %} {% block content %}
+<div id="messages" style="display: none; margin-bottom: 20px;">
+  {% if messages %} {% for message in messages %}
+  <span class="message">{{ message }}</span>
+  {% endfor %} {% endif %}
+</div>
+<div class="container mx-auto px-6 py-10">
+  <div class="flex justify-between items-center mb-10">
+    <h1 class="text-lg font-bold text-gray-800 md:text-2xl">
+      Welcome, {{user.username}}!
+    </h1>
+    <a
+      href="{% url 'todolist:logout' %}"
+      class="btn btn-primary bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white flex items-center hover:shadow-lg transition-all duration-300"
+    >
+      Logout
+    </a>
+  </div>
+      {% if tasks.count == 0 %}
+      <div class="flex justify-center items-center h-[80vh]">
+        <p class="text-center text-lg mb-3">You have no tasks for today.</p>
+      </div>
+      {% else %}
+      <p class="text-center text-lg mb-3">Here are your tasks for today:</p>
+      {% endif %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+        {% for task in tasks %}
+        <div class="rounded-lg overflow-hidden shadow-lg p-8 bg-white m-4 flex flex-col justify-center items-center">
+          <h3 class="font-bold text-2xl text-center mb-3 uppercase flex-grow-0">
+            {{ task.title }}
+          </h3>
+          <p class="text-gray-700 text-lg mb-3 flex-grow text-center">
+            {{ task.description|default:"No description provided." }}
+          </p>
+          <p class="text-gray-700 text-lg mb-5 flex-grow-0 text-center">{{ task.date }}</p>
+          <div class="mt-5 mb-5 flex-grow-0">
+            {% if task.is_finished %}
+            <form
+              action="{% url 'todolist:toggle_finished' task.id %}"
+              method="post"
+            >
+              {% csrf_token %}
+              <label
+                class="inline-flex items-center hover:bg-gray-200 p-2 rounded"
+              >
+                <input
+                  type="checkbox"
+                  name="is_finished"
+                  checked
+                  onchange="this.form.submit()"
+                  class="form-checkbox h-5 w-5 text-green-500"
+                />
+                <span class="ml-2 text-green-600 font-bold">
+                  Task Completed
+                </span>
+              </label>
+            </form>
+            {% else %}
+            <form
+              action="{% url 'todolist:toggle_finished' task.id %}"
+              method="post"
+            >
+              {% csrf_token %}
+              <label
+                class="inline-flex items-center hover:bg-gray-200 p-2 rounded"
+              >
+                <input
+                  type="checkbox"
+                  name="is_finished"
+                  onchange="this.form.submit()"
+                  class="form-checkbox h-5 w-5 text-red-500"
+                />
+                <span class="font-bold ml-2 text-red-500"
+                  >Task Not Completed</span
+              </label>
+            </form>
+            {% endif %}
+          </div>
+          <div class="mt-5 mb-5 flex-grow-0">
+            <form
+              action="{% url 'todolist:delete_task' task.id %}"
+              method="post"
+            >
+              {% csrf_token %}
+              <input
+                type="submit"
+                class="btn btn-danger bg-red-500 hover:bg-red-600 px-6 py-2 rounded text-white"
+                value="Delete Task"
+              />
+            </form>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button
+        id="toggleFormButton"
+        class="fixed bottom-5 md:bottom-10 right-5 md:right-10 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-600 transition-all duration-300"
+      >
+        <i class="fa fa-plus"></i>
+      </button>
+      <div
+        id="addTaskForm"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden transition-all duration-500"
+      >
+        <div class="bg-white rounded-lg p-8 w-4/5 md:w-1/2 lg:w-1/5 relative">
+          <form action="" method="post">
+            {% csrf_token %}
+            <h2 class="text-2xl font-bold mb-6">Add Your New Task</h2>
+            <div class="mb-4 w-full">
+              <input
+                type="text"
+                name="title"
+                placeholder="Enter task title"
+                class="form-control p-2 w-full"
+              />
+            </div>
+            <div class="mb-4 w-full">
+              <textarea
+                name="description"
+                placeholder="Enter task description"
+                class="form-control p-2 w-full"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <input
+                type="submit"
+                value="Add Task"
+                class="btn btn-success bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  window.onload = function () {
+    var messages = document.querySelectorAll("#messages .message");
+    messages.forEach(function (messageElement) {
+      showToast(messageElement.textContent);
+    });
+  };
+
+  function showToast(message) {
+    var toast = document.getElementById("toast");
+    var toastMessage = document.getElementById("toastMessage");
+
+    toastMessage.textContent = message;
+    toast.classList.remove("hidden");
+
+    setTimeout(function () {
+      toast.classList.add("hidden");
+    }, 3000);
+  }
+  document
+    .getElementById("toggleFormButton")
+    .addEventListener("click", function () {
+      var form = document.getElementById("addTaskForm");
+      form.style.display = form.style.display === "none" ? "flex" : "none";
+    });
+
+  window.addEventListener("click", function (event) {
+    var form = document.getElementById("addTaskForm");
+    if (event.target == form) {
+      form.style.display = "none";
+    }
+  });
+</script>
+{% endblock %}
