@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block meta %}
+<title>Login</title>
+{% endblock %} {% block content %}
+<div
+  class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12"
+>
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto lg:w-1/2 mx-auto">
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
+    ></div>
+    <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+      <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-semibold">Login</h1>
+        <form
+          class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7 md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl px-4 sm:px-0"
+          action=""
+          method="post"
+        >
+          {% csrf_token %}
+          <div class="relative">
+            <label for="id_username" class="text-sm font-semibold text-gray-400"
+              >Username</label
+            >
+            <input
+              id="id_username"
+              name="username"
+              type="text"
+              required
+              class="w-full border border-gray-300 px-3 py-2 h-12 rounded-md text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Username"
+            />
+          </div>
+          <div class="relative">
+            <label for="id_password" class="text-sm font-semibold text-gray-400"
+              >Password</label
+            >
+            <input
+              id="id_password"
+              name="password"
+              type="password"
+              required
+              class="w-full border border-gray-300 px-3 py-2 h-12 rounded-md text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Password"
+            />
+          </div>
+          <button
+            type="submit"
+            class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          >
+            Submit
+          </button>
+        </form>
+        {% if form.errors %}
+        <p class="mt-2 text-center text-sm text-red-600">
+          Your username and password didn't match. Please try again.
+        </p>
+        {% endif %} {% if messages %} {% for message in messages %}
+        <p
+          class="mt-2 text-center font-black text-sm {% if message.tags == 'success' %}text-green-600{% else %}text-red-600{% endif %}"
+        >
+          {{ message }}
+        </p>
+        {% endfor %} {% endif %}
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Not a member?
+          <a
+            href="{% url 'todolist:register' %}"
+            class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+            >Register</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

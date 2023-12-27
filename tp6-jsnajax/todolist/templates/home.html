@@ -1,0 +1,306 @@
+{% extends "base.html" %} {% block meta %}
+<title>Home</title>
+{% endblock %} {% block content %}
+<div
+  id="confirmationModal"
+  class="fixed z-10 inset-0 overflow-y-auto hidden"
+  aria-labelledby="modal-title"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      aria-hidden="true"
+    ></div>
+    <span
+      class="hidden sm:inline-block sm:align-middle sm:h-screen"
+      aria-hidden="true"
+      >&#8203;</span
+    >
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full md:my-8 md:align-middle md:max-w-lg md:w-full lg:my-8 lg:align-middle lg:max-w-lg lg:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <h3
+              class="text-lg leading-6 font-medium text-gray-900"
+              id="modal-title"
+            >
+              Are you sure?
+            </h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-500">
+                Are you sure you want to perform this action?
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          id="confirmButton"
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+        >
+          Confirm
+        </button>
+        <button
+          id="cancelButton"
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="messages" style="display: none; margin-bottom: 20px">
+  {% if messages %} {% for message in messages %}
+  <span class="message">{{ message }}</span>
+  {% endfor %} {% endif %}
+</div>
+
+<div class="container mx-auto px-6 py-10">
+  <div class="flex justify-between items-center mb-10">
+    <h1 class="text-lg font-bold text-gray-800 md:text-2xl">
+      Welcome,
+      <span
+        class="font-bold text-blue-900 animate-underline transition-all duration-500 hover:underline whitespace-nowrap cursor-default"
+      >
+        {{user.username}}!
+      </span>
+    </h1>
+    <form action="{% url 'todolist:logout' %}" method="post" id="logoutForm">
+      {% csrf_token %}
+      <a
+        class="btn btn-primary bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white flex items-center hover:shadow-lg transition-all duration-300 logout-button"
+      >
+        Logout
+      </a>
+    </form>
+  </div>
+  {% if tasks.count == 0 %}
+  <div class="flex justify-center items-center h-[80vh]">
+    <p class="text-center text-lg mb-3">
+      You have no tasks for today. Enjoy your day!
+    </p>
+  </div>
+  {% else %}
+  <p class="text-center text-lg mb-3">
+    You have
+    <span class="font-bold"> {{ tasks.count }} </span>
+    tasks for today.
+  </p>
+  {% endif %} {% if tasks.count != 0 %}
+  <div class="flex justify-center items-center mb-10">
+    <p
+      class="text-center text-lg mb-3 font-bold text-gray-800 md:text-2xl flex-grow-0"
+      id="current-time"
+    ></p>
+  </div>
+  {% endif %}
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+    {% for task in tasks %}
+    <div
+      class="rounded-lg overflow-hidden shadow-lg p-8 bg-white m-4 flex flex-col justify-center items-center"
+    >
+      <h3 class="font-bold text-2xl text-center mb-3 uppercase flex-grow-0">
+        {{ task.title }}
+      </h3>
+      <p class="text-gray-700 text-lg mb-3 flex-grow text-center">
+        {{ task.description|default:"No description provided." }}
+      </p>
+      <p class="text-gray-700 text-lg mb-5 flex-grow-0 text-center">
+        {{ task.date }}
+      </p>
+      <div class="mt-5 mb-5 flex-grow-0">
+        {% if task.is_finished %}
+        <form
+          action="{% url 'todolist:toggle_finished' task.id %}"
+          method="post"
+        >
+          {% csrf_token %}
+          <label
+            class="inline-flex items-center hover:bg-gray-200 p-2 rounded cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              name="is_finished"
+              checked
+              onchange="this.form.submit()"
+              class="form-checkbox h-5 w-5 text-green-500"
+            />
+            <span class="ml-2 text-green-600 font-bold"> Task Completed </span>
+          </label>
+        </form>
+        {% else %}
+        <form
+          action="{% url 'todolist:toggle_finished' task.id %}"
+          method="post"
+        >
+          {% csrf_token %}
+          <label
+            class="inline-flex items-center hover:bg-gray-200 p-2 rounded cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              name="is_finished"
+              onchange="this.form.submit()"
+              class="form-checkbox h-5 w-5 text-red-500"
+            />
+            <span class="font-bold ml-2 text-red-500">Task Not Completed </span>
+          </label>
+        </form>
+        {% endif %}
+      </div>
+      <div class="mt-5 mb-5 flex-grow-0">
+        <form
+          action="{% url 'todolist:delete_task' task.id %}"
+          method="post"
+          class="delete-form"
+        >
+          {% csrf_token %}
+          <input
+            type="submit"
+            class="btn btn-danger bg-red-500 hover:bg-red-600 px-6 py-2 rounded text-white text-sm font-bold hover:shadow-lg transition-all duration-300 cursor-pointer delete-button"
+            value="Delete Task"
+          />
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <button
+    id="toggleFormButton"
+    class="fixed bottom-5 md:bottom-10 right-5 md:right-10 w-14 h-14 bg-blue-500 text-white rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-blue-600 transition-all duration-300"
+  >
+    <i class="fa fa-plus"></i>
+  </button>
+  <div
+    id="addTaskForm"
+    class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden transition-all duration-500 backdrop-filter backdrop-blur-sm"
+  >
+    <div
+      class="bg-white rounded-lg p-8 w-4/5 md:w-1/2 lg:w-1/5 flex flex-col justify-center items-center shadow-lg"
+    >
+      <form
+        action="{% url 'todolist:add_task' %}"
+        method="post"
+        class="space-y-4"
+      >
+        {% csrf_token %}
+        <h2 class="text-2xl font-bold mb-8 text-center text-gray-800">
+          Add Your New Task
+        </h2>
+        <div class="mb-4 w-full">
+          <label for="title" class="block text-gray-700 text-sm font-bold mb-2">
+            Task Title:
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Enter task title"
+            class="form-control p-2 w-full border border-gray-300 rounded-md"
+            required
+          />
+        </div>
+        <div class="mb-4 w-full">
+          <label
+            for="description"
+            class="block text-gray-700 text-sm font-bold mb-2"
+          >
+            Task Description:
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Enter task description"
+            class="form-control p-2 w-full border border-gray-300 rounded-md"
+            required
+          ></textarea>
+        </div>
+        <div class="mb-4">
+          <input
+            type="submit"
+            value="Add Task"
+            class="btn btn-success bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white text-sm font-bold hover:shadow-lg transition-all duration-300"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  const confirmationModal = document.getElementById("confirmationModal");
+  const confirmButton = document.getElementById("confirmButton");
+  const cancelButton = document.getElementById("cancelButton");
+
+  function showModal(event, form) {
+    event.preventDefault();
+    confirmationModal.style.display = "block";
+    confirmButton.onclick = () => form.submit();
+    cancelButton.onclick = () => (confirmationModal.style.display = "none");
+  }
+
+  const deleteButtons = document.querySelectorAll(".delete-button");
+  deleteButtons.forEach((button) => {
+    button.onclick = (event) => showModal(event, button.form);
+  });
+
+  const logoutButton = document.querySelector(".logout-button");
+  logoutButton.onclick = (event) =>
+    showModal(event, document.getElementById("logoutForm"));
+
+  function updateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    document.getElementById("current-time").textContent = `${hours}:${minutes}`;
+  }
+
+  window.onload = function () {
+    const messages = document.querySelectorAll("#messages .message");
+    messages.forEach(function (messageElement) {
+      showToast(messageElement.textContent);
+    });
+  };
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    const toastMessage = document.getElementById("toastMessage");
+
+    toastMessage.textContent = message;
+    toast.classList.remove("hidden");
+
+    setTimeout(function () {
+      toast.classList.add("hidden");
+    }, 3000);
+  }
+
+  document
+    .getElementById("toggleFormButton")
+    .addEventListener("click", function () {
+      const form = document.getElementById("addTaskForm");
+      form.style.display = form.style.display === "none" ? "flex" : "none";
+    });
+
+  window.addEventListener("click", function (event) {
+    const form = document.getElementById("addTaskForm");
+    if (event.target === form) {
+      form.style.display = "none";
+    }
+  });
+
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
+{% endblock %}

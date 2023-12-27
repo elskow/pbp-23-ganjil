@@ -1,0 +1,58 @@
+{% extends "base.html" %} 
+{% block meta %}
+<title>Register</title>
+{% endblock %} 
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+  <div class="relative py-3 sm:max-w-xl sm:mx-auto lg:w-1/2 mx-auto">
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+    <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+      <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold">Register</h1>
+        <form class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7 md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl px-4 sm:px-0" action="" method="post">
+          {% csrf_token %}
+          <div class="relative">
+            <label for="{{ form.username.id_for_label }}" class="text-sm font-semibold text-gray-400">Username</label>
+            <input id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" required class="w-full border border-gray-300 px-3 py-2 h-12 rounded-md text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Username">
+            {% if form.username.errors %}
+            {% for error in form.username.errors %}
+            <p class="text-red-500 text-sm">- {{ error }}</p>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="relative">
+            <label for="{{ form.password1.id_for_label }}" class="text-sm font-semibold text-gray-400">Password</label>
+            <input id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" type="password" required class="w-full border border-gray-300 px-3 py-2 h-12 rounded-md text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Password">
+            {% if form.password1.errors %}
+            {% for error in form.password1.errors %}
+            <p class="text-red-500 text-sm">- {{ error }}</p>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="relative">
+            <label for="{{ form.password2.id_for_label }}" class="text-sm font-semibold text-gray-400">Confirm Password</label>
+            <input id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" type="password" required class="w-full border border-gray-300 px-3 py-2 h-12 rounded-md text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Confirm Password">
+            {% if form.password2.errors %}
+            {% for error in form.password2.errors %}
+            <p class="text-red-500 text-sm">- {{ error }}</p>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <button type="submit" class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Register</button>
+        </form>
+        {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+          <li{% if message.tags %} class="text-sm {% if message.tags == 'success' %}text-green-600{% else %}text-red-500{% endif %}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Already have an account?
+          <a href="{% url 'todolist:login' %}" class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
